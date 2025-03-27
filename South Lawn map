@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UT Accessible Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.css" />
+    <style>
+        #map { height: 500px; width: 100%; }
+        #panorama { width: 100%; height: 400px; display: none; }
+    </style>
+</head>
+<body>
+
+    <h2>ABLE</h2>
+    <div id="map"></div>
+    <div id="panorama"></div>
+
+    <script>
+        // Initialize map
+        var map = L.map('map').setView([30.2849, -97.7341], 16); // Centered on UT Austin
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // List of accessible entrances with 360° image URLs
+        var locations = [
+            { 
+                name: "UT Tower", 
+                coords: [30.28619, -97.74033], 
+                image: "https://kuula.co/share/h9Q1y?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1"
+            }
+            { 
+                name: "Parlin Hall", 
+                coords: [30.28504, -97.74047], 
+                image: "https://kuula.co/share/h9QDG?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1"
+            }
+{ 
+                name: "Calhoun Hall", 
+                coords: [30.28446, -97.74048], 
+                image: "https://kuula.co/share/h9QDP?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1"
+            }
+{ 
+                name: "Rainey Hall", 
+                coords: [30.28403, -97.74053], 
+                image: "https://kuula.co/share/h9QDK?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1"
+            }
+
+{ 
+                name: "Mezes Hall", 
+                coords: [30.28460, -97.73915], 
+                image: "https://kuula.co/share/h9QDZ?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1"
+            }
+
+
+        ];
+
+        // Add markers for each location
+        locations.forEach(function(location) {
+            var marker = L.marker(location.coords).addTo(map)
+                .bindPopup(`<b>${location.name}</b><br><button onclick="showPanorama('${location.image}')">View 360°</button>`);
+        });
+
+        // Function to load Pannellum 360° viewer
+        function showPanorama(imageUrl) {
+            document.getElementById("panorama").style.display = "block";
+            pannellum.viewer('panorama', {
+                type: "equirectangular",
+                panorama: imageUrl,
+                autoLoad: true
+            });
+        }
+    </script>
+
+</body>
+</html>
